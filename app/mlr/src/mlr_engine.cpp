@@ -17,6 +17,8 @@
 #include <fstream>
 #include <io/general_fstream.hpp>
 
+#include <hotbox/client/hb_client.hpp>
+
 namespace mlr {
 
 namespace {
@@ -77,6 +79,9 @@ MLREngine::~MLREngine() {
 
 
 void MLREngine::ReadData() {
+
+  hotbox::HBClient hb_client;
+
   std::string train_file = FLAGS_train_file
     + (FLAGS_global_data ? "" : "." + std::to_string(FLAGS_client_id));
   LOG(INFO) << "Reading train file: " << train_file;

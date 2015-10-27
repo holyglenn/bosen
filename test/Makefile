@@ -17,7 +17,7 @@ endif
 
 #BUILD := $(PROJECT)/build
 BUILD :=build
-NEED_MKDIR = $(BUILD) 
+NEED_MKDIR = $(BUILD)
 
 all: path test
 
