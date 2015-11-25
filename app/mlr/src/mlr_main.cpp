@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <algorithm>
 
+
 // Petuum Parameters
 DEFINE_string(hostfile, "", "Path to file containing server ip:port.");
 DEFINE_int32(num_clients, 1, "Total number of clients");
@@ -65,6 +66,9 @@ DEFINE_int32(num_secs_per_checkpoint, 600, "# of seconds between each saving "
 DEFINE_int32(w_table_num_cols, 1000000,
     "# of columns in w_table. Only used for binary LR.");
 
+// Hotbox Parameters
+DEFINE_string(transform_config, "", "Path to Transform Configuration.");
+
 const int32_t kDenseRowFloatTypeID = 0;
 
 int main(int argc, char *argv[]) {
@@ -73,7 +77,8 @@ int main(int argc, char *argv[]) {
 
   //STATS_APP_LOAD_DATA_BEGIN();
   mlr::MLREngine mlr_engine;
-  mlr_engine.ReadData();
+  // mlr_engine.ReadData();
+  mlr_engine.ReadHotboxData();
   //STATS_APP_LOAD_DATA_END();
 
   int32_t feature_dim = mlr_engine.GetFeatureDim();

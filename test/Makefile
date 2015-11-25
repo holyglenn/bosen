@@ -45,6 +45,7 @@ CXXFLAGS += -O2 \
 					 -DDMLC_USE_GLOG=1
 
 INCFLAGS =  -I$(PETUUM_THIRD_PARTY_INCLUDE)
+INCFLAGS += -I$(PETUUM_ROOT)
 INCFLAGS += -I$(PETUUM_THIRD_PARTY_INCLUDE)/hotbox
 INCFLAGS += -I$(PETUUM_THIRD_PARTY_INCLUDE)/hotbox/build # include generated *pb.h
 INCFLAGS += -I$(JAVA_HOME)/include # include java for HDFS/DMLC access

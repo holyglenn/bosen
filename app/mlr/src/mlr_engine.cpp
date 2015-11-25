@@ -13,11 +13,14 @@
 #include <glog/logging.h>
 #include <petuum_ps_common/include/petuum_ps.hpp>
 #include <ml/include/ml.hpp>
+#include <ml/feature/sparse_feature.hpp>
+
 #include <cstdint>
 #include <fstream>
 #include <io/general_fstream.hpp>
 
 #include <hotbox/client/hb_client.hpp>
+#include <hotbox/schema/flexi_datum.hpp>
 
 namespace mlr {
 
@@ -77,6 +80,49 @@ MLREngine::~MLREngine() {
   }
 }
 
+void MLREngine::ReadHotboxData() {
+  //std::string train_file = FLAGS_train_file
+  //  + (FLAGS_global_data ? "" : "." + std::to_string(FLAGS_client_id));
+  // LOG(INFO) << "Reading train file: " << train_file;
+  // petuum::ml::ReadDataLabelLibSVM(train_file, feature_dim_, num_train_data_,
+  //    &train_features_, &train_labels_, feature_one_based_,
+  //    label_one_based_, snappy_compressed_);
+  hotbox::HBClient hb_client;
+  LOG(INFO) << "HBClient Initialized";
+  hotbox::SessionOptions session_options;
+  session_options.db_name = "bosen_db";
+  session_options.session_id = "bosen_session";
+  session_options.transform_config_path = FLAGS_transform_config;
+  session_options.output_store_type = hotbox::OutputStoreType::SPARSE;
+  hotbox::Session session = hb_client.CreateSession(session_options);
+  CHECK(session.GetStatus().IsOk());
+  hotbox::OSchema o_schema = session.GetOSchema();
+
+  num_train_data_ = session.GetNumData();
+  feature_one_based_ = 1;
+  label_one_based_ = 1;
+  snappy_compressed_ = 0;
+  feature_dim_ = o_schema.GetDimension();
+
+  train_features_.resize(num_train_data_);
+  train_labels_.resize(num_train_data_);
+
+
+  int i = 0;
+  for (hotbox::DataIterator it = session.NewDataIterator(0, -1); it.HasNext();
+    it.Next()) {
+    hotbox::FlexiDatum datum = it.GetDatum();
+    train_labels_[i] = (int32_t)datum.GetLabel();
+
+    std::vector<int32_t> idx(datum.GetSparseIdx().begin(),
+        datum.GetSparseIdx().end());
+    train_features_[i] = new petuum::ml::SparseFeature<float>
+          (std::move(idx), datum.MoveSparseVals(), feature_dim_);
+    // LOG(INFO) << datum.ToString();
+    i++;
+  }
+  LOG(INFO) << "Read " << i << " data";
+}
 
 void MLREngine::ReadData() {
 

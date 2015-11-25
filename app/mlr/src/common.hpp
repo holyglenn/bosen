@@ -36,6 +36,7 @@ DECLARE_int32(staleness);
 DECLARE_int32(num_secs_per_checkpoint);
 DECLARE_int32(w_table_num_cols);
 
+DECLARE_string(transform_config);
 
 namespace mlr {
 
