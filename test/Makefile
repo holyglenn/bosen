@@ -52,9 +52,7 @@ INCFLAGS += -I$(JAVA_HOME)/include # include java for HDFS/DMLC access
 INCFLAGS += $(HDFS_INCFLAGS)
 
 LDFLAGS = -Wl,-rpath,$(PETUUM_THIRD_PARTY_LIB) \
-		  -Wl,-rpath=$(LIBJVM) \
           -L$(PETUUM_THIRD_PARTY_LIB) \
-          -L$(LIBJVM) -ljvm \
           -lpthread -lrt -lnsl \
           -lzmq \
           -lglog \
@@ -66,9 +64,11 @@ LDFLAGS = -Wl,-rpath,$(PETUUM_THIRD_PARTY_LIB) \
 			-lyaml-cpp \
 			-lsnappy \
           -ldmlc \
-          -lhdfs \
           -lrocksdb \
-          -lhotbox \
+          -lhotbox 
+JAVALD = -Wl,-rpath=$(LIBJVM) \
+          -L$(LIBJVM) -ljvm \
+          -lhdfs \
 
 HB_SRC = $(shell find src -type f -name "*.cpp")
 HB_PROTO = $(shell find src -type f -name "*.proto")
