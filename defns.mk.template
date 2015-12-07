@@ -43,6 +43,9 @@ PETUUM_CXXFLAGS = -O3 \
 
 PETUUM_INCFLAGS = -I$(PETUUM_SRC) -I$(PETUUM_THIRD_PARTY_INCLUDE)
 PETUUM_INCFLAGS += $(HDFS_INCFLAGS) ${HAS_HDFS}
+PETUUM_INCFLAGS += -I$(PETUUM_THIRD_PARTY_INCLUDE)/hotbox
+PETUUM_INCFLAGS += -I$(PETUUM_THIRD_PARTY_INCLUDE)/hotbox/build # include generated *pb.h
+
 PETUUM_LDFLAGS = -Wl,-rpath,$(PETUUM_THIRD_PARTY_LIB) \
           -L$(PETUUM_THIRD_PARTY_LIB) \
           -pthread -lrt -lnsl \
@@ -57,7 +60,8 @@ PETUUM_LDFLAGS = -Wl,-rpath,$(PETUUM_THIRD_PARTY_LIB) \
           -lboost_system \
           -lboost_thread \
 	  -lyaml-cpp \
-	  -lleveldb
+	  -lleveldb \
+	  -lhotbox 
 PETUUM_LDFLAGS += $(HDFS_LDFLAGS)
 
 PETUUM_PS_LIB = $(PETUUM_LIB)/libpetuum-ps.a
