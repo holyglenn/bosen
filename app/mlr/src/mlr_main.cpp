@@ -76,10 +76,13 @@ int main(int argc, char *argv[]) {
   google::InitGoogleLogging(argv[0]);
 
   //STATS_APP_LOAD_DATA_BEGIN();
+  petuum::HighResolutionTimer read_timer;
   mlr::MLREngine mlr_engine;
   // mlr_engine.ReadData();
   mlr_engine.ReadHotboxData();
   //STATS_APP_LOAD_DATA_END();
+  LOG(INFO) << "Read from hotbox in "
+    << read_timer.elapsed() << " seconds.";
 
   int32_t feature_dim = mlr_engine.GetFeatureDim();
   int32_t num_labels = mlr_engine.GetNumLabels();
@@ -142,6 +145,7 @@ int main(int argc, char *argv[]) {
 
   LOG(INFO) << "Starting MLR with " << FLAGS_num_app_threads << " threads "
     << "on client " << FLAGS_client_id;
+  read_timer.restart();
 
   std::vector<std::thread> threads(FLAGS_num_app_threads);
   for (auto& thr : threads) {
@@ -152,6 +156,8 @@ int main(int argc, char *argv[]) {
   }
 
   petuum::PSTableGroup::ShutDown();
+  LOG(INFO) << "Read from hotbox in "<< read_timer.elapsed() << " seconds.";
   LOG(INFO) << "MLR finished and shut down!";
+
   return 0;
 }
