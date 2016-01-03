@@ -107,10 +107,14 @@ void MLREngine::ReadHotboxData() {
   train_features_.resize(num_train_data_);
   train_labels_.resize(num_train_data_);
 
+  const int criteo_chunk = 195841983/4;
+  int clientid = FLAGS_client_id;
+  int begin_iter = clientid * criteo_chunk;
+  int end_iter = (clientid + 1) * criteo_chunk;
 
   int i = 0;
-  for (hotbox::DataIterator it = session.NewDataIterator(0, -1); it.HasNext();
-    it.Next()) {
+  for (hotbox::DataIterator it = session.NewDataIterator
+      (begin_iter, end_iter, true, 4, 4); it.HasNext(); it.Next()) {
     hotbox::FlexiDatum datum = it.GetDatum();
     train_labels_[i] = (int32_t)datum.GetLabel();
 
