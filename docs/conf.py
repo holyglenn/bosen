@@ -26,8 +26,8 @@ import sys
 # https://github.com/rtfd/readthedocs.org/issues/388
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if on_rtd:
-    from subprocess import call 
-      call('doxygen')
+    from subprocess import call
+    call('doxygen')
 
 # -- General configuration
 # ------------------------------------------------
@@ -43,7 +43,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'breathe',
-    ]
+]
 
 # Breathe extension variables
 breathe_projects = { "Bosen-Breathe": "doxyxml/" }
