@@ -6,6 +6,9 @@
 #include <gflags/gflags.h>
 #include <cstdint>
 
+DECLARE_bool(use_proxy);
+DECLARE_int32(num_proxy_servers);
+
 // Globally accessible gflags.
 DECLARE_int32(num_clients);
 DECLARE_int32(num_app_threads);
@@ -36,6 +39,7 @@ DECLARE_int32(staleness);
 DECLARE_int32(num_secs_per_checkpoint);
 DECLARE_int32(w_table_num_cols);
 
+DECLARE_string(transform_config);
 
 namespace mlr {
 

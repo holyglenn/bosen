@@ -20,8 +20,9 @@ ssh_cmd = (
 params = {
     "train_file": join(app_dir, "datasets/covtype.scale.train.small")
     , "test_file": join(app_dir, "datasets/covtype.scale.test.small")
+    , "transform_config": join(app_dir, "datasets/wdai_dnn.conf")
     , "global_data": "true"
-    , "perform_test": "true"
+    , "perform_test": "false"
     , "use_weight_file": "false"
     , "weight_file": ""
     , "num_epochs": 40

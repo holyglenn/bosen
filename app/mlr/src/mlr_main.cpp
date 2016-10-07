@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <algorithm>
 
+
 // Petuum Parameters
 DEFINE_string(hostfile, "", "Path to file containing server ip:port.");
 DEFINE_int32(num_clients, 1, "Total number of clients");
@@ -20,6 +21,8 @@ DEFINE_string(consistency_model, "SSPPush", "SSP or SSPPush");
 DEFINE_string(stats_path, "", "Statistics output file");
 DEFINE_int32(num_comm_channels_per_client, 1,
     "number of comm channels per client");
+DEFINE_bool(use_proxy, false, "true to use proxy server");
+DEFINE_int32(num_proxy_servers, 1, "number of proxy server.");
 
 // Data Parameters
 DEFINE_int32(num_train_data, 0, "Number of training data. Cannot exceed the "
@@ -65,6 +68,9 @@ DEFINE_int32(num_secs_per_checkpoint, 600, "# of seconds between each saving "
 DEFINE_int32(w_table_num_cols, 1000000,
     "# of columns in w_table. Only used for binary LR.");
 
+// Hotbox Parameters
+DEFINE_string(transform_config, "", "Path to Transform Configuration.");
+
 const int32_t kDenseRowFloatTypeID = 0;
 
 int main(int argc, char *argv[]) {
@@ -72,10 +78,14 @@ int main(int argc, char *argv[]) {
   google::InitGoogleLogging(argv[0]);
 
   //STATS_APP_LOAD_DATA_BEGIN();
+  petuum::HighResolutionTimer read_timer;
   mlr::MLREngine mlr_engine;
-  mlr_engine.ReadData();
+  // mlr_engine.ReadData();
+  mlr_engine.ReadHotboxData();
   //STATS_APP_LOAD_DATA_END();
-
+  LOG(INFO) << "Read from hotbox in "
+    << read_timer.elapsed() << " seconds.";
+/*
   int32_t feature_dim = mlr_engine.GetFeatureDim();
   int32_t num_labels = mlr_engine.GetNumLabels();
 
@@ -137,6 +147,7 @@ int main(int argc, char *argv[]) {
 
   LOG(INFO) << "Starting MLR with " << FLAGS_num_app_threads << " threads "
     << "on client " << FLAGS_client_id;
+  read_timer.restart();
 
   std::vector<std::thread> threads(FLAGS_num_app_threads);
   for (auto& thr : threads) {
@@ -147,6 +158,8 @@ int main(int argc, char *argv[]) {
   }
 
   petuum::PSTableGroup::ShutDown();
+  LOG(INFO) << "Read from hotbox in "<< read_timer.elapsed() << " seconds.";
   LOG(INFO) << "MLR finished and shut down!";
-  return 0;
+
+  return 0; */
 }

@@ -19,6 +19,7 @@ public:
   ~MLREngine();
 
   void ReadData();
+  void ReadHotboxData();
 
   int32_t GetFeatureDim() const {
     return feature_dim_;
